@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Happy Birthday 🤍</title>
+  <title>Happy Birthday Amira 🤍</title>
 
   <style>
     body {
@@ -31,17 +31,20 @@
       margin-bottom: 30px;
     }
 
-    button {
+    .play-btn {
       background: #ff69b4;
       color: white;
       border: none;
-      padding: 15px 25px;
-      font-size: 1.1em;
-      border-radius: 30px;
+      padding: 18px 32px;
+      font-size: 1.4em;
+      border-radius: 50px;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    button:hover {
+    .play-btn:hover {
       background: #ff85c1;
     }
   </style>
@@ -50,7 +53,7 @@
 <body>
 
   <div class="card">
-    <h1>Happy Birthday 🤍</h1>
+    <h1>Happy Birthday Amira 🤍</h1>
     <p>
       Today I celebrate you.<br><br>
 
@@ -67,8 +70,10 @@
     </p>
   </div>
 
-  <!-- Botón de música -->
-  <button onclick="playMusic()">Play music 🎵</button>
+  <!-- Botón Play -->
+  <button class="play-btn" onclick="playMusic()">
+    ▶️ Play music ❤️
+  </button>
 
   <!-- Música -->
   <audio id="music" loop>
