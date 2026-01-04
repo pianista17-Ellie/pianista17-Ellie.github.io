@@ -1,111 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Amira 🤍</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Amira 🤍</title>
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(120deg, #ffb6c1, #ffe4e1);
-      font-family: Arial, sans-serif;
-      color: #333;
-      text-align: center;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  background: #0d0d0d;
+  color: #fff;
+  text-align: center;
+}
 
-    .container {
-      max-width: 420px;
-      margin: auto;
-      padding: 20px;
-    }
+section {
+  display: none;
+  padding: 30px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
 
-    h1 {
-      font-size: 2.2em;
-      margin-bottom: 10px;
-    }
+.active {
+  display: block;
+}
 
-    p {
-      font-size: 1.05em;
-      line-height: 1.6;
-    }
+button {
+  background: #ffb6c1;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 20px;
+  font-size: 1em;
+  margin: 10px;
+  cursor: pointer;
+}
 
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      margin-bottom: 20px;
-    }
+button:hover {
+  background: #ffc0cb;
+}
 
-    button {
-      background: #ff8fa3;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 25px;
-      color: white;
-      font-size: 1em;
-      margin: 8px;
-      cursor: pointer;
-    }
+.typing {
+  font-size: 1.2em;
+  white-space: pre-wrap;
+}
 
-    button:hover {
-      background: #ff6f91;
-    }
+.big-title {
+  font-size: 2.5em;
+}
 
-    .section {
-      display: none;
-      animation: fade 0.5s ease-in-out;
-    }
+.collage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
 
-    .section img {
-      width: 100%;
-      border-radius: 15px;
-      margin-bottom: 10px;
-    }
+.collage img {
+  width: 100%;
+  border-radius: 15px;
+}
 
-    .music-control {
-      margin-top: 15px;
-    }
-
-    @keyframes fade {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
+.card {
+  background: #1a1a1a;
+  border-radius: 20px;
+  padding: 20px;
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- 1. PORTADA ROBÓTICA -->
+<section id="intro" class="active">
+  <div id="robotText" class="typing"></div>
+  <p>💻(◕◡◕) 💻(◕◡◕) 💻(◕◡◕)</p>
+</section>
 
-  <div class="card">
-    <h1>Happy Birthday Amira 🤍</h1>
-    <p>Made with love just for you</p>
+<!-- 2. PREGUNTA -->
+<section id="question">
+  <h1 class="big-title">Hola Amira 🤍</h1>
+  <p>¿Quieres abrir tu regalo?</p>
+  <button onclick="noThanks()">No thanks</button>
+  <button onclick="yesPlease()">Yes please</button>
+</section>
 
-    <button onclick="showSection('message')">Message 💌</button>
-    <button onclick="showSection('photos')">Photos 📸</button>
-    <button onclick="showSection('music')">Music 🎶</button>
-  </div>
+<!-- 2B. NO THANKS -->
+<section id="nope">
+  <p>Prometo que te gustará 😌</p>
+  <img src="photo4.jpg" style="width:80%;border-radius:20px;">
+  <br><br>
+  <button onclick="back()">Try again</button>
+</section>
 
-  <!-- MESSAGE -->
-  <div id="message" class="card section">
-    <p>
-      Today I celebrate you 🤍<br><br>
-      Even if our worlds are far apart,  
-      I love the beauty of your world,  
-      your culture, your language,  
-      and the way you exist so differently from me.<br><br>
-      I’m really glad I met you.  
-      You make my days brighter in ways you probably don’t even know.<br><br>
-      I wish you health, happiness,  
-      and moments that make you smile a lot.
-    </p>
-  </div>
+<!-- 3. MENÚ -->
+<section id="menu">
+  <h2>These are for you 🤍</h2>
+  <button onclick="openPhotos()">📸 Photos</button>
+  <button onclick="openLetter()">💌 Letter</button>
+</section>
 
-  <!-- PHOTOS -->
-  <div id="photos" class="card section">
+<!-- 4A. FOTOS -->
+<section id="photos">
+  <audio controls autoplay loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+  <div class="collage">
     <img src="photo1.jpg">
     <img src="photo2.jpg">
     <img src="photo3.jpg">
@@ -116,23 +114,74 @@
     <img src="photo8.jpg">
     <img src="photo9.jpg">
   </div>
+</section>
 
-  <!-- MUSIC -->
-  <div id="music" class="card section">
-    <p>Play our song 🤍</p>
-    <audio id="audio" controls>
-      <source src="music.mp3" type="audio/mpeg">
-    </audio>
+<!-- 4B. CARTA -->
+<section id="letter">
+  <audio controls autoplay loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+  <div class="card">
+    <div id="letterText" class="typing"></div>
   </div>
-
-</div>
+</section>
 
 <script>
-  function showSection(id) {
-    const sections = document.querySelectorAll('.section');
-    sections.forEach(section => section.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
+const introText =
+"Amira...\n\nHoy es tu cumpleaños.\nAsí que hice esta codificación de recuerdos para ti :)";
+
+let i = 0;
+function typeIntro() {
+  if (i < introText.length) {
+    document.getElementById("robotText").innerHTML += introText.charAt(i);
+    i++;
+    setTimeout(typeIntro, 60);
+  } else {
+    setTimeout(() => {
+      showSection("question");
+    }, 3000);
   }
+}
+typeIntro();
+
+function showSection(id) {
+  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function noThanks() { showSection("nope"); }
+function yesPlease() { showSection("menu"); }
+function back() { showSection("question"); }
+function openPhotos() { showSection("photos"); }
+
+function openLetter() {
+  showSection("letter");
+  typeLetter();
+}
+
+const letter =
+"Hoy te celebro 🤍\n\n" +
+"Celebro tu vida y este nuevo año, lleno de sorpresas y caminos por descubrir.\n\n" +
+"Aunque nuestros mundos estén tan lejos, tú desde Argelia, yo desde un rincón de Latinoamérica,\n" +
+"me maravilla la belleza de tu mundo: tu cultura, tu idioma, tu manera tan única de existir.\n\n" +
+"Me alegra profundamente haberte conocido.\n\n" +
+"Gracias a Dios por tu existir.\n\n" +
+"Te deseo salud, paz, felicidad y muchos momentos que te hagan sonreír… hoy y siempre.";
+
+let j = 0;
+function typeLetter() {
+  const el = document.getElementById("letterText");
+  el.innerHTML = "";
+  j = 0;
+  function t() {
+    if (j < letter.length) {
+      el.innerHTML += letter.charAt(j);
+      j++;
+      setTimeout(t, 40);
+    }
+  }
+  t();
+}
 </script>
 
 </body>
