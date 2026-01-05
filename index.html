@@ -1,255 +1,328 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amira 🤍</title>
+<title>Happy Birthday Amira 🤍</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin: 0;
-  background: black;
-  color: white;
-  font-family: 'Trebuchet MS', sans-serif;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-section {
-  display: none;
-  min-height: 100vh;
-  padding: 25px;
-  box-sizing: border-box;
-  text-align: center;
+body{
+  font-family: 'Orbitron', sans-serif;
+  background:black;
+  color:white;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-.active {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  animation: fadeIn 0.6s ease;
+/* MATRIX BACKGROUND */
+.matrix{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:black;
+  overflow:hidden;
+}
+.matrix span{
+  position:absolute;
+  top:-20px;
+  color:#0f0;
+  font-size:14px;
+  animation: fall linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(110vh);}
 }
 
-@keyframes fadeIn {
-  from {opacity:0; transform: scale(0.95);}
-  to {opacity:1; transform: scale(1);}
+/* GENERAL */
+.section{
+  display:none;
+  padding:25px;
+  min-height:100vh;
+  text-align:center;
+}
+.section.active{display:block;}
+
+button{
+  background:#ff69b4;
+  border:none;
+  padding:14px 22px;
+  border-radius:30px;
+  font-size:18px;
+  cursor:pointer;
+  margin:10px;
 }
 
-button {
-  background: #ffb6c1;
-  border: none;
-  padding: 18px 32px;
-  border-radius: 30px;
-  font-size: 1.2em;
-  margin: 12px;
-  cursor: pointer;
+button:active{transform:scale(0.95);}
+
+/* PLAY */
+#playBtn img{
+  width:120px;
 }
 
-.big {
-  font-size: 2.6em;
+/* CAKE */
+#cake img{
+  width:160px;
+  animation: fadeDown 2s ease;
+}
+@keyframes fadeDown{
+  from{opacity:0; transform:translateY(-50px);}
+  to{opacity:1;}
 }
 
-.typing {
-  font-size: 1.25em;
-  line-height: 1.8;
-  white-space: pre-wrap;
+.script{
+  font-family:'Pacifico', cursive;
+  font-size:22px;
+  margin-top:20px;
 }
 
-.matrix {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.2;
+/* QUESTION */
+.crown{
+  font-size:48px;
+}
+.title{
+  font-size:38px;
 }
 
-.collage {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+/* GIFT MENU */
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  margin-top:30px;
 }
 
-.collage img {
-  width: 100%;
-  border-radius: 15px;
-  cursor: pointer;
+/* PHOTOS */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.gallery img{
+  width:100%;
+  border-radius:15px;
+  cursor:pointer;
 }
 
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 99;
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.8);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+.modal img{
+  width:90%;
+  max-width:400px;
+}
+.modal span{
+  position:absolute;
+  top:20px;
+  right:20px;
+  font-size:30px;
+  cursor:pointer;
 }
 
-.modal img {
-  max-width: 90%;
-  border-radius: 20px;
+/* LETTER */
+.letter{
+  font-size:20px;
+  line-height:1.7;
+  direction:rtl;
+  text-align:right;
+  font-family:'Pacifico', cursive;
 }
 
-.close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 2em;
-  cursor: pointer;
+/* CONFETTI */
+.confetti{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
 }
-
-audio {
-  width: 100%;
-  margin: 12px 0;
+.confetti span{
+  position:absolute;
+  font-size:24px;
+  animation: drop 3s linear;
+}
+@keyframes drop{
+  to{transform:translateY(100vh); opacity:0;}
 }
 </style>
 </head>
 
 <body>
 
-<canvas class="matrix"></canvas>
-<audio id="click" src="click.mp3"></audio>
+<div class="matrix" id="matrix"></div>
 
-<!-- INTRO -->
-<section id="intro" class="active">
-  <div class="big">🎂🎈</div>
-  <div id="introText" class="typing"></div>
+<!-- AUDIO -->
+<audio id="introMusic" src="cancion.mp3"></audio>
+<audio id="photoMusic" src="music.mp3"></audio>
+<audio id="letterMusic" src="song.mp3"></audio>
+
+<!-- PLAY -->
+<section class="section active" id="play">
+  <h2>Press Play 🤍</h2><br>
+  <button id="playBtn">
+    <img src="torta.png">
+  </button>
+</section>
+
+<!-- CAKE -->
+<section class="section" id="cake">
+  <img src="torta.png">
+  <p class="script">
+    Amira…<br>
+    Today is your birthday<br>
+    so I coded this for you 💻<br>
+    (◕‿◕)っ🎔
+  </p>
 </section>
 
 <!-- QUESTION -->
-<section id="question">
-  <h1 class="big">مرحبا أميرة 🤍</h1>
-  <p>تحبي تفتحي هديتك؟</p>
-  <button onclick="noThanks()">لا</button>
-  <button onclick="yesPlease()">أكيد 🤍</button>
+<section class="section" id="question">
+  <div class="crown">👑</div>
+  <div class="title">Happy Birthday</div>
+  <p style="margin-top:20px;">Do you want to open your gift?</p>
+  <button onclick="answer(true)">Yes please</button>
+  <button onclick="answer(false)">No thanks</button>
 </section>
 
-<!-- NO -->
-<section id="nope">
-  <p>نعدك تعجبك 😌</p>
-  <img src="photo7.jpg" style="width:80%;border-radius:20px;">
-  <button onclick="back()">جربي مرة أخرى</button>
-</section>
-
-<!-- MENU -->
-<section id="menu">
-  <h2 class="big">هديتك 🤍</h2>
-  <button onclick="openPhotos()">📸 صور</button>
-  <button onclick="openLetter()">💌 رسالة</button>
-  <button onclick="back()">⬅ رجوع</button>
+<!-- GIFT MENU -->
+<section class="section" id="menu">
+  <h2>These are for you 🤍</h2>
+  <div class="menu">
+    <button onclick="openPhotos()">📸 Photos</button>
+    <button onclick="openLetter()">💌 Letter</button>
+    <button onclick="goBackQuestion()">⬅ Back</button>
+  </div>
 </section>
 
 <!-- PHOTOS -->
-<section id="photos">
-  <h3>اسمعي الموسيقى وشوفي الذكريات 🤍</h3>
-  <audio id="music" controls>
-    <source src="music.mp3">
-  </audio>
-
-  <div class="collage">
-    <img src="photo1.jpg" onclick="openImg(this)">
-    <img src="photo2.jpg" onclick="openImg(this)">
-    <img src="photo3.jpg" onclick="openImg(this)">
-    <img src="photo4.jpg" onclick="openImg(this)">
-    <img src="photo5.jpg" onclick="openImg(this)">
-    <img src="photo6.jpg" onclick="openImg(this)">
-    <img src="photo7.jpg" onclick="openImg(this)">
-    <img src="photo8.jpg" onclick="openImg(this)">
-    <img src="photo9.jpg" onclick="openImg(this)">
-  </div>
-
-  <button onclick="stopMusic(); backMenu()">⬅ رجوع</button>
+<section class="section" id="photos">
+  <h3>Play the music and relive these moments 🎶</h3><br>
+  <audio controls autoplay src="music.mp3"></audio><br><br>
+  <div class="gallery">
+    <img src="photo1.jpg" onclick="zoom(this)">
+    <img src="photo2.jpg" onclick="zoom(this)">
+    <img src="photo3.jpg" onclick="zoom(this)">
+    <img src="photo4.jpg" onclick="zoom(this)">
+    <img src="photo5.jpg" onclick="zoom(this)">
+    <img src="photo6.jpg" onclick="zoom(this)">
+    <img src="photo7.jpg" onclick="zoom(this)">
+    <img src="photo8.jpg" onclick="zoom(this)">
+    <img src="photo9.jpg" onclick="zoom(this)">
+  </div><br>
+  <button onclick="backMenu()">⬅ Back</button>
 </section>
 
 <!-- LETTER -->
-<section id="letter">
-  <audio id="song" controls>
-    <source src="song.mp3">
-  </audio>
-
-  <img src="parrot.gif" style="width:120px;margin:10px;">
-  <div id="letterText" class="typing"></div>
-
-  <button onclick="stopSong(); backMenu()">⬅ رجوع</button>
+<section class="section" id="letter">
+  <audio controls autoplay src="song.mp3"></audio><br><br>
+  <div class="letter">
+    اليوم أحتفل بك 🤍<br><br>
+    أحتفل بحياتك وهذا العام الجديد المليء بالمفاجآت والطرق التي لم تُكتشف بعد...
+    <br><br>
+    الحمد لله على وجودك، وأتمنى لك الصحة والسلام والسعادة
+    ولحظات كثيرة تجعلك تبتسمين اليوم ودائمًا.
+  </div><br>
+  <button onclick="backMenu()">⬅ Back</button>
 </section>
 
-<div class="modal" id="modal">
-  <span class="close" onclick="closeImg()">✕</span>
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="closeModal()">
+  <span>✖</span>
   <img id="modalImg">
 </div>
 
-<script>
-const click = document.getElementById("click");
-function sound(){ click.currentTime=0; click.play(); }
+<div class="confetti" id="confetti"></div>
 
+<script>
+/* MATRIX */
+for(let i=0;i<100;i++){
+  let s=document.createElement("span");
+  s.innerText=Math.random()>0.5?"1":"0";
+  s.style.left=Math.random()*100+"vw";
+  s.style.animationDuration=2+Math.random()*5+"s";
+  document.getElementById("matrix").appendChild(s);
+}
+
+/* PLAY FLOW */
+const intro=document.getElementById("introMusic");
+document.getElementById("playBtn").onclick=()=>{
+  intro.play();
+  show("cake");
+  setTimeout(()=>show("question"),4000);
+};
+
+function answer(ok){
+  intro.pause();
+  intro.currentTime=0;
+  if(ok) show("menu");
+  else{
+    alert("I promise you’ll like it 🤍");
+    show("menu");
+  }
+}
+
+/* NAV */
 function show(id){
-  sound();
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
-
-function noThanks(){ show('nope'); }
-function yesPlease(){ show('menu'); }
-function back(){ show('question'); }
-function backMenu(){ show('menu'); }
-function openPhotos(){ show('photos'); }
-function openLetter(){ show('letter'); typeLetter(); }
-
-function stopMusic(){
-  music.pause();
-  music.currentTime = 0;
-}
-function stopSong(){
-  song.pause();
-  song.currentTime = 0;
+function goBackQuestion(){ show("question"); }
+function backMenu(){
+  stopAudios();
+  show("menu");
 }
 
-// INTRO
-const intro =
-"Amira...\n\nاليوم عيد ميلادك 🎂\n\nحبيت نبرمج ذكريات ليك 🤍";
-let i=0;
-function typeIntro(){
-  if(i<intro.length){
-    introText.innerHTML+=intro.charAt(i);
-    i++;
-    setTimeout(typeIntro,70);
-  } else {
-    setTimeout(()=>show('question'),2200);
+/* PHOTOS */
+function openPhotos(){
+  stopAudios();
+  document.getElementById("photoMusic").play();
+  show("photos");
+}
+function zoom(img){
+  document.getElementById("modalImg").src=img.src;
+  document.getElementById("modal").style.display="flex";
+}
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+}
+
+/* LETTER */
+function openLetter(){
+  stopAudios();
+  document.getElementById("letterMusic").play();
+  confetti();
+  show("letter");
+}
+
+/* STOP ALL */
+function stopAudios(){
+  document.querySelectorAll("audio").forEach(a=>{
+    a.pause(); a.currentTime=0;
+  });
+}
+
+/* CONFETTI */
+function confetti(){
+  const c=document.getElementById("confetti");
+  c.innerHTML="";
+  for(let i=0;i<30;i++){
+    let s=document.createElement("span");
+    s.innerText="🎈";
+    s.style.left=Math.random()*100+"vw";
+    c.appendChild(s);
   }
-}
-typeIntro();
-
-// LETTER
-const letter =
-"اليوم نحتفل بيك 🤍\n\n"+
-"نحتفل بحياتك وبسنة جديدة مليانة مفاجآت وطرق جديدة.\n"+
-"حتى ولو عوالمنا بعيدة، إنتي من الجزائر وأنا من زاوية من أمريكا اللاتينية،\n"+
-"يعجبني جمال عالمك: ثقافتك، لغتك، وطريقتك الخاصة في الوجود.\n\n"+
-"فرحانة بزاف لأني تعرفت عليك من العام لي فات.\n"+
-"دايمًا تدهشيني بإيمانك، بلطفك، وبالهدوء لي تعطيه بدون مجهود.\n\n"+
-"نتمنى عقلك يكون عامر بالأحلام، وقلبك شجاع تعيشي الحياة بحرية.\n\n"+
-"شكرا لوجودك 🤍\n"+
-"نتمنالك صحة، سلام، سعادة، وضحكة دايمًا.";
-
-let j=0;
-function typeLetter(){
-  letterText.innerHTML="";
-  j=0;
-  function t(){
-    if(j<letter.length){
-      letterText.innerHTML+=letter.charAt(j);
-      j++;
-      setTimeout(t,55);
-    }
-  }
-  t();
-}
-
-// MODAL
-function openImg(img){
-  modal.style.display="flex";
-  modalImg.src=img.src;
-}
-function closeImg(){
-  modal.style.display="none";
 }
 </script>
 
