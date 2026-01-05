@@ -3,94 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday Amira 🤍</title>
+<title>Happy Birthday Amira</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
+
 body{
   background:black;
-  color:white;
+  color:#00ffcc;
   font-family:Courier, monospace;
-  overflow:hidden;
+  overflow-x:hidden;
+}
+
+canvas{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  z-index:0;
 }
 
 section{
-  display:none;
   min-height:100vh;
-  padding:25px;
+  padding:30px 15px;
+  display:none;
+  position:relative;
+  z-index:1;
   text-align:center;
 }
 
 .active{display:block}
 
-h1{font-size:2.5em;margin-bottom:20px}
-h2{font-size:1.8em;margin-bottom:15px}
+h1{
+  font-size:2.5rem;
+  margin-bottom:15px;
+}
+
+h2{
+  font-size:1.6rem;
+  margin-bottom:15px;
+}
 
 button{
-  padding:18px 28px;
-  font-size:20px;
-  border:none;
-  border-radius:15px;
-  background:#00ffd5;
-  color:black;
+  font-size:1.2rem;
+  padding:15px 25px;
   margin:10px;
+  background:#00ffcc;
+  color:black;
+  border:none;
+  border-radius:12px;
   cursor:pointer;
 }
 
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+button:active{transform:scale(0.95)}
+
+.big{
+  font-size:3rem;
 }
 
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:-1;
+.matrixText{
+  font-size:1.3rem;
+  margin-top:20px;
+  min-height:120px;
 }
 
-/* typing */
-.type{
-  white-space:pre-wrap;
-  border-right:3px solid #0f0;
-  animation:blink .7s infinite;
-  font-size:1.3em;
+.torta{
+  width:200px;
+  margin:20px auto;
+  animation:fadeIn 2s ease-in-out;
 }
-@keyframes blink{50%{border-color:transparent}}
 
-/* gallery */
+@keyframes fadeIn{
+  from{opacity:0;transform:scale(0.8)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.timer{
+  margin-top:10px;
+  font-size:1.1rem;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:30px;
+}
+
+.card{
+  background:rgba(0,0,0,0.6);
+  padding:30px;
+  border-radius:15px;
+  font-size:1.5rem;
+}
+
 .gallery{
   display:flex;
-  flex-direction:column;
-  gap:15px;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
 }
+
 .gallery img{
-  width:100%;
-  border-radius:15px;
+  width:45%;
+  border-radius:10px;
   cursor:pointer;
 }
 
-.modal{
+.full{
   position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.9);
+  top:0;left:0;
+  width:100%;height:100%;
+  background:black;
   display:none;
   align-items:center;
   justify-content:center;
+  z-index:5;
 }
-.modal img{max-width:90%}
-.modal span{
+
+.full img{
+  max-width:90%;
+  max-height:90%;
+}
+
+.close{
   position:absolute;
-  top:20px;right:25px;
-  font-size:30px;
+  top:20px;
+  right:20px;
+  font-size:2rem;
+  color:white;
   cursor:pointer;
 }
 
-/* balloons */
-.balloons::before{
-  content:"🎈🎈🎈🎈🎈";
-  font-size:45px;
-  display:block;
-  margin-bottom:15px;
+.letter{
+  font-size:1.2rem;
+  line-height:1.6;
+  text-align:left;
+  margin-top:20px;
+}
+
+.balloons{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
 }
 </style>
 </head>
@@ -100,183 +158,220 @@ canvas{
 <canvas id="matrix"></canvas>
 
 <audio id="intro" src="cancion.mp3"></audio>
-<audio id="photosMusic" src="music.mp3"></audio>
-<audio id="letterMusic" src="song.mp3"></audio>
+<audio id="song" src="song.mp3"></audio>
 <audio id="click" src="click.mp3"></audio>
 
-<!-- PLAY -->
-<section id="play" class="active">
-  <h1>PRESS PLAY ▶</h1>
-  <button onclick="fx();startIntro()">▶</button>
+<!-- START -->
+<section id="start" class="active">
+  <h1 class="big">PRESS PLAY</h1>
+  <button onclick="playIntro()">▶ PLAY</button>
 </section>
 
-<!-- INTRO -->
-<section id="intro">
-  <img src="torta.png" width="180"><br><br>
-  <div id="introText" class="type"></div><br><br>
-  <div id="timer">15</div>
-  <p>Wait to continue…</p>
-  <button id="nextBtn" disabled onclick="fx();goGift()">NEXT</button>
+<!-- TORTA -->
+<section id="torta">
+  <img src="torta.png" class="torta">
+  <div class="matrixText" id="typeText"></div>
+  <div class="timer" id="timer">wait… 15</div>
+  <button id="nextBtn" disabled onclick="go('birthday')">NEXT</button>
 </section>
 
-<!-- GIFT QUESTION -->
-<section id="gift">
-  <h1>🎉 HAPPY BIRTHDAY AMIRA 🎉</h1>
+<!-- QUESTION -->
+<section id="birthday">
+  <h1 class="big">🎉 HAPPY BIRTHDAY 👑</h1>
   <h2>Do you want to open your gift?</h2>
-  <button onclick="fx();openMenu()">YES PLEASE</button>
-  <button onclick="fx();openNo()">NO THANKS</button><br>
-  <button onclick="fx();backIntro()">RETURN</button>
-</section>
-
-<!-- NO -->
-<section id="no">
-  <h2>I promise you’ll like it 😏</h2>
-  <img src="photo7.jpg" width="250"><br>
-  <button onclick="fx();openMenu()">TRY AGAIN</button>
+  <button onclick="yes()">Yes please</button>
+  <button onclick="no()">No thanks</button>
+  <button onclick="go('torta')">Return</button>
 </section>
 
 <!-- MENU -->
 <section id="menu">
-  <h1>THIS IS FOR YOU 🌠</h1>
-  <button onclick="fx();openPhotos()">📸 MOMENTS</button>
-  <button onclick="fx();openLetter()">💌 LETTER</button>
-  <button onclick="fx();openGift()">🎁 GIFT</button><br>
-  <button onclick="fx();backGift()">RETURN</button>
+  <h1>THIS IS FOR YOU ⭐</h1>
+  <div class="grid">
+    <div class="card" onclick="openPhotos()">📸 Moments</div>
+    <div class="card" onclick="openLetter()">💌 Letter</div>
+    <div class="card" onclick="openGift()">🎁 Gift</div>
+  </div>
+  <button onclick="backMenu()">Return</button>
 </section>
 
 <!-- PHOTOS -->
 <section id="photos">
-  <h2>Moments 🤍</h2>
+  <h2>Moments ✨</h2>
   <div class="gallery">
-    <img src="photo1.jpg" onclick="openImg(this)">
-    <img src="photo2.jpg" onclick="openImg(this)">
-    <img src="photo3.jpg" onclick="openImg(this)">
-    <img src="photo4.jpg" onclick="openImg(this)">
-    <img src="photo5.jpg" onclick="openImg(this)">
-    <img src="photo6.jpg" onclick="openImg(this)">
-    <img src="photo8.jpg" onclick="openImg(this)">
-    <img src="photo9.jpg" onclick="openImg(this)">
+    <img src="photo1.jpg" onclick="zoom(this)">
+    <img src="photo2.jpg" onclick="zoom(this)">
+    <img src="photo3.jpg" onclick="zoom(this)">
+    <img src="photo4.jpg" onclick="zoom(this)">
   </div>
-  <button onclick="fx();stopAll();openMenu()">RETURN</button>
+  <button onclick="backMenu()">Return</button>
 </section>
 
 <!-- LETTER -->
-<section id="letter" class="balloons">
-  <img src="parrot.gif" width="130"><br><br>
-  <div id="letterText" class="type"></div><br>
-  <button onclick="fx();stopAll();openMenu()">RETURN</button>
+<section id="letter">
+  <img src="parrot.gif" width="120">
+  <div class="letter" id="letterText"></div>
+  <button onclick="backMenu()">Return</button>
 </section>
 
-<!-- GIFT ROBUX -->
-<section id="giftBox">
-  <h2>Your Robux will arrive on January 15 🎁✨</h2>
-  <img src="photo4.jpg" width="250"><br>
-  <button onclick="fx();openMenu()">RETURN</button>
+<!-- GIFT -->
+<section id="gift">
+  <h2>🎁</h2>
+  <p>Los robux te llegarán el 15 de enero 💝</p>
+  <img src="photo4.jpg" width="200">
+  <button onclick="backMenu()">Return</button>
 </section>
 
-<div class="modal" id="modal">
-  <span onclick="closeImg()">✖</span>
-  <img id="modalImg">
+<div class="full" id="full">
+  <span class="close" onclick="closeFull()">✕</span>
+  <img id="fullImg">
 </div>
 
 <script>
-const intro=document.getElementById("intro");
-const introAudio=document.getElementById("intro");
+/* MATRIX */
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-function fx(){click.play()}
-function show(id){
+const bits=["0","1"];
+const streams=[];
+for(let i=0;i<canvas.width/40;i++){
+  streams.push({
+    x:i*40,
+    y:Math.random()*canvas.height,
+    speed:1+Math.random()*2,
+    val:bits[Math.floor(Math.random()*2)]
+  });
+}
+
+setInterval(()=>{
+  ctx.fillStyle="rgba(0,0,0,0.15)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#00ff99";
+  ctx.font="20px monospace";
+  streams.forEach(s=>{
+    ctx.fillText(s.val,s.x,s.y);
+    s.y+=s.speed;
+    if(Math.random()>0.98) s.val=bits[Math.floor(Math.random()*2)];
+    if(s.y>canvas.height) s.y=-20;
+  });
+},60);
+
+/* LOGIC */
+const intro=document.getElementById("intro");
+const song=document.getElementById("song");
+const click=document.getElementById("click");
+
+function sound(){click.play()}
+
+function go(id){
+  sound();
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
-function stopAll(){
-  introAudio.pause();photosMusic.pause();letterMusic.pause();
+
+function playIntro(){
+  sound();
+  intro.play();
+  go("torta");
+  typeWriter();
+  startTimer();
 }
 
-// intro
-function startIntro(){
-  introAudio.play();
-  show("intro");
-  type("introText","Amira...\nToday is your birthday.\nSo I made this interactive coding gift for you.\n(◕‿◕)っ🎔");
-  let t=15;
-  const timer=setInterval(()=>{
-    document.getElementById("timer").textContent=t;
+function yes(){
+  sound();
+  intro.pause();
+  go("menu");
+}
+
+function no(){
+  sound();
+  intro.pause();
+  go("gift");
+}
+
+function openPhotos(){
+  sound();
+  song.currentTime=0;
+  song.play();
+  go("photos");
+}
+
+function openLetter(){
+  sound();
+  song.currentTime=0;
+  song.play();
+  go("letter");
+  writeLetter();
+}
+
+function openGift(){
+  sound();
+  go("gift");
+}
+
+function backMenu(){
+  song.pause();
+  go("menu");
+}
+
+/* TYPING */
+const text="Amira… Today is your birthday. I made this interactive coding for you 💻";
+let i=0;
+function typeWriter(){
+  if(i<text.length){
+    document.getElementById("typeText").innerHTML+=text.charAt(i);
+    i++;
+    setTimeout(typeWriter,80);
+  }
+}
+
+/* TIMER */
+let t=15;
+function startTimer(){
+  const el=document.getElementById("timer");
+  const btn=document.getElementById("nextBtn");
+  const int=setInterval(()=>{
     t--;
-    if(t<0){
-      clearInterval(timer);
-      document.getElementById("nextBtn").disabled=false;
+    el.innerText="wait… "+t;
+    if(t<=0){
+      clearInterval(int);
+      btn.disabled=false;
+      el.innerText="you can continue";
     }
   },1000);
 }
 
-function goGift(){show("gift")}
-function backIntro(){show("intro")}
+/* LETTER */
+const letter=`Hoy te celebro 🤍
+Celebro tu vida y este nuevo año, lleno de sorpresas y caminos por descubrir.
+Aunque nuestros mundos estén tan lejos…
+Gracias a Dios por tu existir.
+Te deseo salud, paz, felicidad y muchos momentos que te hagan sonreír… hoy y siempre.`;
 
-// menu
-function openMenu(){show("menu")}
-function openNo(){show("no")}
-function backGift(){show("gift")}
-
-// photos
-function openPhotos(){
-  stopAll();photosMusic.play();
-  show("photos");
+let j=0;
+function writeLetter(){
+  const box=document.getElementById("letterText");
+  box.innerHTML="";
+  j=0;
+  (function typing(){
+    if(j<letter.length){
+      box.innerHTML+=letter.charAt(j);
+      j++;
+      setTimeout(typing,60);
+    }
+  })();
 }
 
-// letter
-function openLetter(){
-  stopAll();letterMusic.play();
-  show("letter");
-  type("letterText",
-`Hoy te celebro 🤍
-
-Celebro tu vida y este nuevo año, lleno de sorpresas y caminos por descubrir. Aunque nuestros mundos estén tan lejos, tú desde Argelia, yo desde un rincón de Latinoamérica, me maravilla la belleza de tu mundo: tu cultura, tu idioma, tu manera tan única de existir, tan distinta a la mía.
-
-Me alegra profundamente haberte conocido, desde aquel encuentro del año pasado. Ya te lo he dicho antes, pero de verdad me sorprende quién eres: cómo vives tu fe, lo amable y correcta que eres, la calma que transmites sin esfuerzo.
-
-Deseo que tu mente esté llena de sueños por cumplir y que tengas la valentía de vivir la vida con intensidad y libertad...
-
-Gracias a Dios por tu existir. Te deseo salud, paz, felicidad y muchos momentos que te hagan sonreír… hoy y siempre.`);
+/* IMAGES */
+function zoom(img){
+  document.getElementById("full").style.display="flex";
+  document.getElementById("fullImg").src=img.src;
 }
-
-// gift
-function openGift(){show("giftBox")}
-
-// typing
-function type(id,text){
-  let i=0;
-  const el=document.getElementById(id);
-  el.textContent="";
-  const t=setInterval(()=>{
-    el.textContent+=text[i];
-    i++;
-    if(i>=text.length)clearInterval(t);
-  },40);
+function closeFull(){
+  document.getElementById("full").style.display="none";
 }
-
-// images
-function openImg(img){
-  modal.style.display="flex";
-  modalImg.src=img.src;
-}
-function closeImg(){modal.style.display="none"}
-
-// matrix
-const c=document.getElementById("matrix");
-const ctx=c.getContext("2d");
-c.width=innerWidth;c.height=innerHeight;
-const cols=Math.floor(c.width/20);
-const drops=Array(cols).fill(0);
-function matrix(){
-  ctx.fillStyle="rgba(0,0,0,.05)";
-  ctx.fillRect(0,0,c.width,c.height);
-  ctx.fillStyle="#0f0";
-  drops.forEach((y,i)=>{
-    const txt=Math.random()>0.5?"0":"1";
-    ctx.fillText(txt,i*20,y);
-    drops[i]=y>c.height?0:y+20;
-  });
-}
-setInterval(matrix,50);
 </script>
 
 </body>
