@@ -6,56 +6,65 @@
 <title>Happy Birthday Amira 🤍</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family: 'Courier New', monospace;
   background:black;
-  color:#fff;
+  color:white;
+  font-family:Courier, monospace;
   overflow:hidden;
 }
 
 section{
   display:none;
   min-height:100vh;
-  padding:30px;
+  padding:25px;
   text-align:center;
 }
 
 .active{display:block}
 
+h1{font-size:2.5em;margin-bottom:20px}
+h2{font-size:1.8em;margin-bottom:15px}
+
 button{
-  background:#00ffcc;
+  padding:18px 28px;
+  font-size:20px;
   border:none;
-  padding:15px 25px;
+  border-radius:15px;
+  background:#00ffd5;
+  color:black;
   margin:10px;
-  font-size:18px;
-  border-radius:12px;
   cursor:pointer;
 }
 
-h1,h2{margin-bottom:20px}
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
 
-.matrix{
+canvas{
   position:fixed;
   inset:0;
   z-index:-1;
 }
 
-canvas{width:100%;height:100%}
-
-/* escritura */
+/* typing */
 .type{
-  border-right:2px solid #0f0;
   white-space:pre-wrap;
-  overflow:hidden;
-  animation: blink .7s infinite;
+  border-right:3px solid #0f0;
+  animation:blink .7s infinite;
+  font-size:1.3em;
 }
 @keyframes blink{50%{border-color:transparent}}
 
+/* gallery */
+.gallery{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
 .gallery img{
   width:100%;
-  max-width:300px;
-  margin:10px;
   border-radius:15px;
   cursor:pointer;
 }
@@ -70,73 +79,74 @@ canvas{width:100%;height:100%}
 }
 .modal img{max-width:90%}
 .modal span{
-  position:absolute;top:20px;right:30px;
-  font-size:30px;cursor:pointer
+  position:absolute;
+  top:20px;right:25px;
+  font-size:30px;
+  cursor:pointer;
 }
 
-/* globos */
+/* balloons */
 .balloons::before{
   content:"🎈🎈🎈🎈🎈";
-  font-size:40px;
-  animation: float 5s infinite;
-}
-@keyframes float{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-20px)}
-  100%{transform:translateY(0)}
+  font-size:45px;
+  display:block;
+  margin-bottom:15px;
 }
 </style>
 </head>
 
 <body>
 
-<canvas class="matrix"></canvas>
+<canvas id="matrix"></canvas>
 
-<!-- audios -->
 <audio id="intro" src="cancion.mp3"></audio>
 <audio id="photosMusic" src="music.mp3"></audio>
 <audio id="letterMusic" src="song.mp3"></audio>
-<audio id="clickSound" src="click.mp3"></audio>
+<audio id="click" src="click.mp3"></audio>
 
 <!-- PLAY -->
 <section id="play" class="active">
   <h1>PRESS PLAY ▶</h1>
-  <button onclick="clickFx();start()">▶</button>
+  <button onclick="fx();startIntro()">▶</button>
 </section>
 
 <!-- INTRO -->
-<section id="introText">
+<section id="intro">
   <img src="torta.png" width="180"><br><br>
-  <div id="typed" class="type"></div><br>
-  <button onclick="clickFx();toGift()">NEXT</button>
+  <div id="introText" class="type"></div><br><br>
+  <div id="timer">15</div>
+  <p>Wait to continue…</p>
+  <button id="nextBtn" disabled onclick="fx();goGift()">NEXT</button>
 </section>
 
-<!-- GIFT -->
+<!-- GIFT QUESTION -->
 <section id="gift">
-  <h1>👑 HAPPY BIRTHDAY AMIRA 👑</h1>
+  <h1>🎉 HAPPY BIRTHDAY AMIRA 🎉</h1>
   <h2>Do you want to open your gift?</h2>
-  <button onclick="clickFx();yes()">YES PLEASE</button>
-  <button onclick="clickFx();no()">NO THANKS</button><br>
-  <button onclick="clickFx();backIntro()">RETURN</button>
+  <button onclick="fx();openMenu()">YES PLEASE</button>
+  <button onclick="fx();openNo()">NO THANKS</button><br>
+  <button onclick="fx();backIntro()">RETURN</button>
 </section>
 
 <!-- NO -->
-<section id="nope">
+<section id="no">
   <h2>I promise you’ll like it 😏</h2>
   <img src="photo7.jpg" width="250"><br>
-  <button onclick="clickFx();toGift()">TRY AGAIN</button>
+  <button onclick="fx();openMenu()">TRY AGAIN</button>
 </section>
 
 <!-- MENU -->
 <section id="menu">
-  <button onclick="clickFx();photos()">📸 MOMENTS</button>
-  <button onclick="clickFx();letter()">💌 LETTER</button><br>
-  <button onclick="clickFx();toGift()">BACK</button>
+  <h1>THIS IS FOR YOU 🌠</h1>
+  <button onclick="fx();openPhotos()">📸 MOMENTS</button>
+  <button onclick="fx();openLetter()">💌 LETTER</button>
+  <button onclick="fx();openGift()">🎁 GIFT</button><br>
+  <button onclick="fx();backGift()">RETURN</button>
 </section>
 
 <!-- PHOTOS -->
 <section id="photos">
-  <h2>✨ Our Moments ✨</h2>
+  <h2>Moments 🤍</h2>
   <div class="gallery">
     <img src="photo1.jpg" onclick="openImg(this)">
     <img src="photo2.jpg" onclick="openImg(this)">
@@ -147,14 +157,21 @@ canvas{width:100%;height:100%}
     <img src="photo8.jpg" onclick="openImg(this)">
     <img src="photo9.jpg" onclick="openImg(this)">
   </div>
-  <button onclick="clickFx();stopPhotos();menu()">BACK</button>
+  <button onclick="fx();stopAll();openMenu()">RETURN</button>
 </section>
 
 <!-- LETTER -->
 <section id="letter" class="balloons">
-  <img src="parrot.gif" width="120"><br><br>
+  <img src="parrot.gif" width="130"><br><br>
   <div id="letterText" class="type"></div><br>
-  <button onclick="clickFx();stopLetter();menu()">BACK</button>
+  <button onclick="fx();stopAll();openMenu()">RETURN</button>
+</section>
+
+<!-- GIFT ROBUX -->
+<section id="giftBox">
+  <h2>Your Robux will arrive on January 15 🎁✨</h2>
+  <img src="photo4.jpg" width="250"><br>
+  <button onclick="fx();openMenu()">RETURN</button>
 </section>
 
 <div class="modal" id="modal">
@@ -163,59 +180,77 @@ canvas{width:100%;height:100%}
 </div>
 
 <script>
-// click
-function clickFx(){
-  const c=document.getElementById("clickSound");
-  c.currentTime=0;c.play();
-}
+const intro=document.getElementById("intro");
+const introAudio=document.getElementById("intro");
 
-// show
+function fx(){click.play()}
 function show(id){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
-
-// music stop
 function stopAll(){
-  intro.pause();photosMusic.pause();letterMusic.pause();
+  introAudio.pause();photosMusic.pause();letterMusic.pause();
 }
 
-// start
-function start(){
-  intro.play();
-  show("introText");
-  typeText("typed",
-"Amira...\nToday is your birthday.\nSo I coded this interactive memory for you.\n(◕‿◕)っ🎔");
+// intro
+function startIntro(){
+  introAudio.play();
+  show("intro");
+  type("introText","Amira...\nToday is your birthday.\nSo I made this interactive coding gift for you.\n(◕‿◕)っ🎔");
+  let t=15;
+  const timer=setInterval(()=>{
+    document.getElementById("timer").textContent=t;
+    t--;
+    if(t<0){
+      clearInterval(timer);
+      document.getElementById("nextBtn").disabled=false;
+    }
+  },1000);
 }
 
-function toGift(){stopAll();show("gift")}
-function backIntro(){stopAll();show("introText")}
-function yes(){show("menu")}
-function no(){show("nope")}
-function menu(){stopAll();show("menu")}
+function goGift(){show("gift")}
+function backIntro(){show("intro")}
+
+// menu
+function openMenu(){show("menu")}
+function openNo(){show("no")}
+function backGift(){show("gift")}
 
 // photos
-function photos(){
-  stopAll();photosMusic.play();show("photos")
+function openPhotos(){
+  stopAll();photosMusic.play();
+  show("photos");
 }
-function stopPhotos(){photosMusic.pause()}
 
 // letter
-function letter(){
-  stopAll();letterMusic.play();show("letter");
-  typeText("letterText",
-"Hoy te celebro 🤍\n\nCelebro tu vida y este nuevo año, lleno de sorpresas y caminos por descubrir. Aunque nuestros mundos estén tan lejos, tú desde Argelia, yo desde un rincón de Latinoamérica, me maravilla la belleza de tu mundo: tu cultura, tu idioma, tu manera tan única de existir, tan distinta a la mía.\n\nMe alegra profundamente haberte conocido, desde aquel encuentro del año pasado. Ya te lo he dicho antes, pero de verdad me sorprende quién eres: cómo vives tu fe, lo amable y correcta que eres, la calma que transmites sin esfuerzo.\n\nDeseo que tu mente esté llena de sueños por cumplir y que tengas la valentía de vivir la vida con intensidad y libertad...\n\nGracias a Dios por tu existir. Te deseo salud, paz, felicidad y muchos momentos que te hagan sonreír… hoy y siempre."
-  );
+function openLetter(){
+  stopAll();letterMusic.play();
+  show("letter");
+  type("letterText",
+`Hoy te celebro 🤍
+
+Celebro tu vida y este nuevo año, lleno de sorpresas y caminos por descubrir. Aunque nuestros mundos estén tan lejos, tú desde Argelia, yo desde un rincón de Latinoamérica, me maravilla la belleza de tu mundo: tu cultura, tu idioma, tu manera tan única de existir, tan distinta a la mía.
+
+Me alegra profundamente haberte conocido, desde aquel encuentro del año pasado. Ya te lo he dicho antes, pero de verdad me sorprende quién eres: cómo vives tu fe, lo amable y correcta que eres, la calma que transmites sin esfuerzo.
+
+Deseo que tu mente esté llena de sueños por cumplir y que tengas la valentía de vivir la vida con intensidad y libertad...
+
+Gracias a Dios por tu existir. Te deseo salud, paz, felicidad y muchos momentos que te hagan sonreír… hoy y siempre.`);
 }
-function stopLetter(){letterMusic.pause()}
+
+// gift
+function openGift(){show("giftBox")}
 
 // typing
-function typeText(id,text){
-  let i=0,el=document.getElementById(id);el.textContent="";
-  let t=setInterval(()=>{
+function type(id,text){
+  let i=0;
+  const el=document.getElementById(id);
+  el.textContent="";
+  const t=setInterval(()=>{
     el.textContent+=text[i];
-    i++;if(i>=text.length)clearInterval(t)
-  },35);
+    i++;
+    if(i>=text.length)clearInterval(t);
+  },40);
 }
 
 // images
@@ -226,17 +261,19 @@ function openImg(img){
 function closeImg(){modal.style.display="none"}
 
 // matrix
-const c=document.querySelector("canvas"),x=c.getContext("2d");
+const c=document.getElementById("matrix");
+const ctx=c.getContext("2d");
 c.width=innerWidth;c.height=innerHeight;
-let y=Array(300).fill(0);
+const cols=Math.floor(c.width/20);
+const drops=Array(cols).fill(0);
 function matrix(){
-  x.fillStyle="rgba(0,0,0,.05)";
-  x.fillRect(0,0,c.width,c.height);
-  x.fillStyle="#0f0";
-  y.forEach((v,i)=>{
-    const t=Math.random()>0.5?"0":"1";
-    x.fillText(t,i*10,v);
-    y[i]=v>c.height?0:v+10;
+  ctx.fillStyle="rgba(0,0,0,.05)";
+  ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle="#0f0";
+  drops.forEach((y,i)=>{
+    const txt=Math.random()>0.5?"0":"1";
+    ctx.fillText(txt,i*20,y);
+    drops[i]=y>c.height?0:y+20;
   });
 }
 setInterval(matrix,50);
