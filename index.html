@@ -9,7 +9,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{
   background:black;
-  color:#00ffcc;
+  color:white;
   font-family:Courier, monospace;
   overflow-x:hidden;
 }
@@ -22,7 +22,7 @@ canvas{
 
 section{
   min-height:100vh;
-  padding:30px 15px;
+  padding:30px 16px;
   display:none;
   position:relative;
   z-index:1;
@@ -31,21 +31,21 @@ section{
 
 .active{display:block}
 
-h1{font-size:2.6rem;margin-bottom:15px}
-h2{font-size:1.6rem;margin-bottom:15px}
+h1{font-size:2.8rem;margin-bottom:15px}
+h2{font-size:1.7rem;margin-bottom:15px}
 
 button{
-  padding:16px 28px;
+  padding:18px 30px;
   font-size:1.3rem;
   margin:12px;
   border:none;
-  border-radius:14px;
-  background:#00ffcc;
+  border-radius:16px;
+  background:white;
   color:black;
   cursor:pointer;
 }
 
-.big{font-size:3.2rem}
+.big{font-size:3.4rem}
 
 .card-grid{
   display:grid;
@@ -55,15 +55,15 @@ button{
 }
 
 .card{
-  background:rgba(0,0,0,0.65);
-  border:2px solid #00ffcc;
-  padding:40px 10px;
-  font-size:1.5rem;
-  border-radius:18px;
+  background:rgba(255,255,255,0.1);
+  border:2px solid white;
+  padding:45px 10px;
+  font-size:1.6rem;
+  border-radius:20px;
 }
 
 .torta{
-  width:200px;
+  width:220px;
   animation:fade 2s ease;
 }
 
@@ -83,13 +83,13 @@ button{
 .gallery{
   display:flex;
   flex-wrap:wrap;
-  gap:10px;
+  gap:12px;
   justify-content:center;
 }
 
 .gallery img{
   width:46%;
-  border-radius:12px;
+  border-radius:14px;
   cursor:pointer;
 }
 
@@ -107,18 +107,11 @@ button{
 .close{position:absolute;top:20px;right:20px;font-size:2rem;color:white}
 
 .letter{
-  font-size:1.25rem;
-  line-height:1.8;
+  font-size:1.3rem;
+  line-height:1.9;
   text-align:right;
   direction:rtl;
   margin-top:20px;
-}
-
-.balloons{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:0;
 }
 </style>
 </head>
@@ -131,13 +124,11 @@ button{
 <audio id="song" src="song.mp3"></audio>
 <audio id="click" src="click.mp3"></audio>
 
-<!-- START -->
 <section id="start" class="active">
   <h1 class="big">PRESS PLAY</h1>
   <button onclick="playIntro()">▶ PLAY</button>
 </section>
 
-<!-- TORTA -->
 <section id="torta">
   <img src="torta.png" class="torta">
   <div class="matrixText" id="typeText"></div>
@@ -145,7 +136,6 @@ button{
   <button id="nextBtn" disabled onclick="go('question')">NEXT</button>
 </section>
 
-<!-- QUESTION -->
 <section id="question">
   <h1 class="big">🎉 HAPPY BIRTHDAY 👑</h1>
   <h2>Do you want to open your gift?</h2>
@@ -153,14 +143,12 @@ button{
   <button onclick="no()">No thanks</button>
 </section>
 
-<!-- NO THANKS -->
 <section id="promise">
-  <h2>Prometo que te gustará (っ ͡❛ 𝆒 ͡❛)っ🎔</h2>
-  <img src="photo7.jpg" width="220" style="margin:20px">
+  <h2>I promise you’ll like it (っ ͡❛ 𝆒 ͡❛)っ🎔</h2>
+  <img src="photo7.jpg" width="230" style="margin:20px">
   <button onclick="go('question')">Return</button>
 </section>
 
-<!-- MENU -->
 <section id="menu">
   <h1>THIS IS FOR YOU ⭐</h1>
   <div class="card-grid">
@@ -168,9 +156,9 @@ button{
     <div class="card" onclick="openLetter()">💌 LETTER</div>
     <div class="card" onclick="openGift()">🎁 GIFT</div>
   </div>
+  <button onclick="go('question')">Return</button>
 </section>
 
-<!-- PHOTOS -->
 <section id="photos">
   <h2>Moments ✨</h2>
   <div class="gallery">
@@ -178,22 +166,24 @@ button{
     <img src="photo2.jpg" onclick="zoom(this)">
     <img src="photo3.jpg" onclick="zoom(this)">
     <img src="photo4.jpg" onclick="zoom(this)">
+    <img src="photo5.jpg" onclick="zoom(this)">
+    <img src="photo6.jpg" onclick="zoom(this)">
+    <img src="photo7.jpg" onclick="zoom(this)">
+    <img src="photo8.jpg" onclick="zoom(this)">
+    <img src="photo9.jpg" onclick="zoom(this)">
   </div>
   <button onclick="backMenu()">Return</button>
 </section>
 
-<!-- LETTER -->
 <section id="letter">
   <img src="parrot.gif" width="120">
   <div class="letter" id="letterText"></div>
   <button onclick="backMenu()">Return</button>
 </section>
 
-<!-- GIFT -->
 <section id="gift">
-  <h2>🎁</h2>
-  <p>Los robux te llegarán el 15 de enero 💝</p>
-  <img src="photo4.jpg" width="220">
+  <h2>Your Robux will arrive on January 15 🎁🤍📅🤗</h2>
+  <img src="photo4.jpg" width="230">
   <button onclick="backMenu()">Return</button>
 </section>
 
@@ -203,20 +193,19 @@ button{
 </div>
 
 <script>
-/* MATRIX */
+/* MATRIX like stars */
 const c=document.getElementById("matrix"),ctx=c.getContext("2d");
 c.width=innerWidth;c.height=innerHeight;
-const cols=Math.floor(c.width/20);
-const drops=Array(cols).fill(0);
+const drops=Array(120).fill(0).map(()=>Math.random()*c.height);
 function draw(){
-  ctx.fillStyle="rgba(0,0,0,0.1)";
+  ctx.fillStyle="rgba(0,0,0,0.15)";
   ctx.fillRect(0,0,c.width,c.height);
-  ctx.fillStyle="#00ff99";
-  ctx.font="18px monospace";
+  ctx.fillStyle="white";
+  ctx.font="14px monospace";
   drops.forEach((y,i)=>{
-    const txt=Math.random()>0.5?"0":"1";
-    ctx.fillText(txt,i*20,y);
-    drops[i]=y>c.height?0:y+20;
+    const x=(i*17)%c.width;
+    ctx.fillText(Math.random()>0.5?"0":"1",x,y);
+    drops[i]=y>c.height?0:y+10;
   });
 }
 setInterval(draw,50);
@@ -247,7 +236,7 @@ function openGift(){sound(); intro.pause(); go("gift")}
 function backMenu(){song.pause(); go("menu")}
 
 /* TYPE */
-const txt="Amira… Today is your birthday. I made this interactive coding for you 💻";
+const txt="Amira… Today is your birthday. I coded this just for you 💻";
 let i=0;
 function typeWriter(){
   if(i<txt.length){
@@ -285,7 +274,7 @@ function writeLetter(){
   (function t(){
     if(j<letter.length){
       letterText.innerHTML+=letter[j++];
-      setTimeout(t,60);
+      setTimeout(t,55);
     }
   })();
 }
