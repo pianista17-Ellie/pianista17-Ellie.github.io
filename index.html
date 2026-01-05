@@ -8,10 +8,9 @@
 <style>
 body {
   margin: 0;
-  font-family: 'Courier New', monospace;
   background: black;
   color: white;
-  overflow-x: hidden;
+  font-family: 'Trebuchet MS', sans-serif;
 }
 
 section {
@@ -27,33 +26,39 @@ section {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform: scale(0.95);}
+  to {opacity:1; transform: scale(1);}
 }
 
 button {
   background: #ffb6c1;
   border: none;
-  padding: 18px 30px;
-  border-radius: 25px;
+  padding: 18px 32px;
+  border-radius: 30px;
   font-size: 1.2em;
   margin: 12px;
   cursor: pointer;
 }
 
 .big {
-  font-size: 2.4em;
+  font-size: 2.6em;
 }
 
 .typing {
-  font-size: 1.2em;
+  font-size: 1.25em;
+  line-height: 1.8;
   white-space: pre-wrap;
-  line-height: 1.7;
 }
 
 .matrix {
   position: fixed;
   inset: 0;
   z-index: -1;
-  opacity: 0.25;
+  opacity: 0.2;
 }
 
 .collage {
@@ -93,7 +98,7 @@ button {
 
 audio {
   width: 100%;
-  margin: 15px 0;
+  margin: 12px 0;
 }
 </style>
 </head>
@@ -101,6 +106,7 @@ audio {
 <body>
 
 <canvas class="matrix"></canvas>
+<audio id="click" src="click.mp3"></audio>
 
 <!-- INTRO -->
 <section id="intro" class="active">
@@ -119,21 +125,23 @@ audio {
 <!-- NO -->
 <section id="nope">
   <p>نعدك تعجبك 😌</p>
-  <img src="photo4.jpg" style="width:80%;border-radius:20px;">
+  <img src="photo7.jpg" style="width:80%;border-radius:20px;">
   <button onclick="back()">جربي مرة أخرى</button>
 </section>
 
 <!-- MENU -->
 <section id="menu">
-  <h2 class="big">هذا ليك 🤍</h2>
+  <h2 class="big">هديتك 🤍</h2>
   <button onclick="openPhotos()">📸 صور</button>
   <button onclick="openLetter()">💌 رسالة</button>
+  <button onclick="back()">⬅ رجوع</button>
 </section>
 
 <!-- PHOTOS -->
 <section id="photos">
-  <audio controls>
-    <source src="music.mp3" type="audio/mpeg">
+  <h3>اسمعي الموسيقى وشوفي الذكريات 🤍</h3>
+  <audio id="music" controls>
+    <source src="music.mp3">
   </audio>
 
   <div class="collage">
@@ -148,51 +156,55 @@ audio {
     <img src="photo9.jpg" onclick="openImg(this)">
   </div>
 
-  <button onclick="backMenu()">⬅ رجوع</button>
+  <button onclick="stopMusic(); backMenu()">⬅ رجوع</button>
 </section>
 
 <!-- LETTER -->
 <section id="letter">
-  <audio controls>
-    <source src="song.mp3" type="audio/mpeg">
+  <audio id="song" controls>
+    <source src="song.mp3">
   </audio>
 
-  <img src="parrot.gif" style="width:120px;margin-bottom:10px;">
-
+  <img src="parrot.gif" style="width:120px;margin:10px;">
   <div id="letterText" class="typing"></div>
 
-  <button onclick="backMenu()">⬅ رجوع</button>
+  <button onclick="stopSong(); backMenu()">⬅ رجوع</button>
 </section>
 
-<!-- IMAGE MODAL -->
 <div class="modal" id="modal">
   <span class="close" onclick="closeImg()">✕</span>
   <img id="modalImg">
 </div>
 
 <script>
-// MATRIX
-const canvas = document.querySelector(".matrix");
-const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-const letters = "0101010101";
-const drops = Array(60).fill(1);
-function matrix() {
-  ctx.fillStyle = "rgba(0,0,0,0.05)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "#ff69b4";
-  drops.forEach((y,i)=>{
-    const text = letters[Math.floor(Math.random()*letters.length)];
-    ctx.fillText(text,i*20,y*20);
-    drops[i] = y*20 > canvas.height || Math.random() > 0.95 ? 0 : y+1;
-  });
-}
-setInterval(matrix,50);
+const click = document.getElementById("click");
+function sound(){ click.currentTime=0; click.play(); }
 
-// INTRO TEXT
+function show(id){
+  sound();
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function noThanks(){ show('nope'); }
+function yesPlease(){ show('menu'); }
+function back(){ show('question'); }
+function backMenu(){ show('menu'); }
+function openPhotos(){ show('photos'); }
+function openLetter(){ show('letter'); typeLetter(); }
+
+function stopMusic(){
+  music.pause();
+  music.currentTime = 0;
+}
+function stopSong(){
+  song.pause();
+  song.currentTime = 0;
+}
+
+// INTRO
 const intro =
-"Amira...\n\nاليوم عيد ميلادك 🎂\n\nحبيت نبرمج شوية ذكريات ليك 🤍";
+"Amira...\n\nاليوم عيد ميلادك 🎂\n\nحبيت نبرمج ذكريات ليك 🤍";
 let i=0;
 function typeIntro(){
   if(i<intro.length){
@@ -200,22 +212,10 @@ function typeIntro(){
     i++;
     setTimeout(typeIntro,70);
   } else {
-    setTimeout(()=>show('question'),2500);
+    setTimeout(()=>show('question'),2200);
   }
 }
 typeIntro();
-
-// NAV
-function show(id){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-function noThanks(){show('nope')}
-function yesPlease(){show('menu')}
-function back(){show('question')}
-function backMenu(){show('menu')}
-function openPhotos(){show('photos')}
-function openLetter(){show('letter');typeLetter()}
 
 // LETTER
 const letter =
@@ -237,13 +237,13 @@ function typeLetter(){
     if(j<letter.length){
       letterText.innerHTML+=letter.charAt(j);
       j++;
-      setTimeout(t,60);
+      setTimeout(t,55);
     }
   }
   t();
 }
 
-// IMAGE MODAL
+// MODAL
 function openImg(img){
   modal.style.display="flex";
   modalImg.src=img.src;
