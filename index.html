@@ -1,186 +1,255 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Amira 🤍</title>
+<title>Amira 🤍</title>
 
 <style>
 body {
   margin: 0;
   font-family: 'Courier New', monospace;
-  background: #0d0d0d;
-  color: #fff;
-  text-align: center;
+  background: black;
+  color: white;
+  overflow-x: hidden;
 }
 
 section {
   display: none;
-  padding: 30px;
   min-height: 100vh;
+  padding: 25px;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .active {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 button {
   background: #ffb6c1;
   border: none;
-  padding: 15px 25px;
-  border-radius: 20px;
-  font-size: 1em;
-  margin: 10px;
+  padding: 18px 30px;
+  border-radius: 25px;
+  font-size: 1.2em;
+  margin: 12px;
   cursor: pointer;
 }
 
-button:hover {
-  background: #ffc0cb;
+.big {
+  font-size: 2.4em;
 }
 
 .typing {
   font-size: 1.2em;
   white-space: pre-wrap;
+  line-height: 1.7;
 }
 
-.big-title {
-  font-size: 2.5em;
+.matrix {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.25;
 }
 
 .collage {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
 .collage img {
   width: 100%;
   border-radius: 15px;
+  cursor: pointer;
 }
 
-.card {
-  background: #1a1a1a;
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+.modal img {
+  max-width: 90%;
   border-radius: 20px;
-  padding: 20px;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+audio {
+  width: 100%;
+  margin: 15px 0;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 1. PORTADA ROBÓTICA -->
+<canvas class="matrix"></canvas>
+
+<!-- INTRO -->
 <section id="intro" class="active">
-  <div id="robotText" class="typing"></div>
-  <p>💻(◕◡◕) 💻(◕◡◕) 💻(◕◡◕)</p>
+  <div class="big">🎂🎈</div>
+  <div id="introText" class="typing"></div>
 </section>
 
-<!-- 2. PREGUNTA -->
+<!-- QUESTION -->
 <section id="question">
-  <h1 class="big-title">Hola Amira 🤍</h1>
-  <p>¿Quieres abrir tu regalo?</p>
-  <button onclick="noThanks()">No thanks</button>
-  <button onclick="yesPlease()">Yes please</button>
+  <h1 class="big">مرحبا أميرة 🤍</h1>
+  <p>تحبي تفتحي هديتك؟</p>
+  <button onclick="noThanks()">لا</button>
+  <button onclick="yesPlease()">أكيد 🤍</button>
 </section>
 
-<!-- 2B. NO THANKS -->
+<!-- NO -->
 <section id="nope">
-  <p>Prometo que te gustará 😌</p>
+  <p>نعدك تعجبك 😌</p>
   <img src="photo4.jpg" style="width:80%;border-radius:20px;">
-  <br><br>
-  <button onclick="back()">Try again</button>
+  <button onclick="back()">جربي مرة أخرى</button>
 </section>
 
-<!-- 3. MENÚ -->
+<!-- MENU -->
 <section id="menu">
-  <h2>These are for you 🤍</h2>
-  <button onclick="openPhotos()">📸 Photos</button>
-  <button onclick="openLetter()">💌 Letter</button>
+  <h2 class="big">هذا ليك 🤍</h2>
+  <button onclick="openPhotos()">📸 صور</button>
+  <button onclick="openLetter()">💌 رسالة</button>
 </section>
 
-<!-- 4A. FOTOS -->
+<!-- PHOTOS -->
 <section id="photos">
-  <audio controls autoplay loop>
+  <audio controls>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
+
   <div class="collage">
-    <img src="photo1.jpg">
-    <img src="photo2.jpg">
-    <img src="photo3.jpg">
-    <img src="photo4.jpg">
-    <img src="photo5.jpg">
-    <img src="photo6.jpg">
-    <img src="photo7.jpg">
-    <img src="photo8.jpg">
-    <img src="photo9.jpg">
+    <img src="photo1.jpg" onclick="openImg(this)">
+    <img src="photo2.jpg" onclick="openImg(this)">
+    <img src="photo3.jpg" onclick="openImg(this)">
+    <img src="photo4.jpg" onclick="openImg(this)">
+    <img src="photo5.jpg" onclick="openImg(this)">
+    <img src="photo6.jpg" onclick="openImg(this)">
+    <img src="photo7.jpg" onclick="openImg(this)">
+    <img src="photo8.jpg" onclick="openImg(this)">
+    <img src="photo9.jpg" onclick="openImg(this)">
   </div>
+
+  <button onclick="backMenu()">⬅ رجوع</button>
 </section>
 
-<!-- 4B. CARTA -->
+<!-- LETTER -->
 <section id="letter">
-  <audio controls autoplay loop>
+  <audio controls>
     <source src="song.mp3" type="audio/mpeg">
   </audio>
-  <div class="card">
-    <div id="letterText" class="typing"></div>
-  </div>
+
+  <img src="parrot.gif" style="width:120px;margin-bottom:10px;">
+
+  <div id="letterText" class="typing"></div>
+
+  <button onclick="backMenu()">⬅ رجوع</button>
 </section>
 
-<script>
-const introText =
-"Amira...\n\nHoy es tu cumpleaños.\nAsí que hice esta codificación de recuerdos para ti :)";
+<!-- IMAGE MODAL -->
+<div class="modal" id="modal">
+  <span class="close" onclick="closeImg()">✕</span>
+  <img id="modalImg">
+</div>
 
-let i = 0;
-function typeIntro() {
-  if (i < introText.length) {
-    document.getElementById("robotText").innerHTML += introText.charAt(i);
+<script>
+// MATRIX
+const canvas = document.querySelector(".matrix");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+const letters = "0101010101";
+const drops = Array(60).fill(1);
+function matrix() {
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#ff69b4";
+  drops.forEach((y,i)=>{
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text,i*20,y*20);
+    drops[i] = y*20 > canvas.height || Math.random() > 0.95 ? 0 : y+1;
+  });
+}
+setInterval(matrix,50);
+
+// INTRO TEXT
+const intro =
+"Amira...\n\nاليوم عيد ميلادك 🎂\n\nحبيت نبرمج شوية ذكريات ليك 🤍";
+let i=0;
+function typeIntro(){
+  if(i<intro.length){
+    introText.innerHTML+=intro.charAt(i);
     i++;
-    setTimeout(typeIntro, 60);
+    setTimeout(typeIntro,70);
   } else {
-    setTimeout(() => {
-      showSection("question");
-    }, 3000);
+    setTimeout(()=>show('question'),2500);
   }
 }
 typeIntro();
 
-function showSection(id) {
-  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+// NAV
+function show(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
+function noThanks(){show('nope')}
+function yesPlease(){show('menu')}
+function back(){show('question')}
+function backMenu(){show('menu')}
+function openPhotos(){show('photos')}
+function openLetter(){show('letter');typeLetter()}
 
-function noThanks() { showSection("nope"); }
-function yesPlease() { showSection("menu"); }
-function back() { showSection("question"); }
-function openPhotos() { showSection("photos"); }
-
-function openLetter() {
-  showSection("letter");
-  typeLetter();
-}
-
+// LETTER
 const letter =
-"Hoy te celebro 🤍\n\n" +
-"Celebro tu vida y este nuevo año, lleno de sorpresas y caminos por descubrir.\n\n" +
-"Aunque nuestros mundos estén tan lejos, tú desde Argelia, yo desde un rincón de Latinoamérica,\n" +
-"me maravilla la belleza de tu mundo: tu cultura, tu idioma, tu manera tan única de existir.\n\n" +
-"Me alegra profundamente haberte conocido.\n\n" +
-"Gracias a Dios por tu existir.\n\n" +
-"Te deseo salud, paz, felicidad y muchos momentos que te hagan sonreír… hoy y siempre.";
+"اليوم نحتفل بيك 🤍\n\n"+
+"نحتفل بحياتك وبسنة جديدة مليانة مفاجآت وطرق جديدة.\n"+
+"حتى ولو عوالمنا بعيدة، إنتي من الجزائر وأنا من زاوية من أمريكا اللاتينية،\n"+
+"يعجبني جمال عالمك: ثقافتك، لغتك، وطريقتك الخاصة في الوجود.\n\n"+
+"فرحانة بزاف لأني تعرفت عليك من العام لي فات.\n"+
+"دايمًا تدهشيني بإيمانك، بلطفك، وبالهدوء لي تعطيه بدون مجهود.\n\n"+
+"نتمنى عقلك يكون عامر بالأحلام، وقلبك شجاع تعيشي الحياة بحرية.\n\n"+
+"شكرا لوجودك 🤍\n"+
+"نتمنالك صحة، سلام، سعادة، وضحكة دايمًا.";
 
-let j = 0;
-function typeLetter() {
-  const el = document.getElementById("letterText");
-  el.innerHTML = "";
-  j = 0;
-  function t() {
-    if (j < letter.length) {
-      el.innerHTML += letter.charAt(j);
+let j=0;
+function typeLetter(){
+  letterText.innerHTML="";
+  j=0;
+  function t(){
+    if(j<letter.length){
+      letterText.innerHTML+=letter.charAt(j);
       j++;
-      setTimeout(t, 40);
+      setTimeout(t,60);
     }
   }
   t();
+}
+
+// IMAGE MODAL
+function openImg(img){
+  modal.style.display="flex";
+  modalImg.src=img.src;
+}
+function closeImg(){
+  modal.style.display="none";
 }
 </script>
 
